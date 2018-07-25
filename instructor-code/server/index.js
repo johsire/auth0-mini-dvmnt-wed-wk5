@@ -28,7 +28,7 @@ app.get('/auth/callback', async (req, res) => {
   };
 
   // exchange code in the payload object for a token
-  let responseWithToken = axios.post(
+  let responseWithToken = await axios.post(
     `https://${process.env.REACT_APP_AUTH0_DOMAIN}/oauth/token`,
     payload
   );
@@ -39,7 +39,8 @@ app.get('/auth/callback', async (req, res) => {
     }`
   );
 
-  console.log(responseWithUserData);
+  req.session.user = responseWithUserData.data;
+  res.redirect('/');
 });
 
 app.post('/api/logout', (req, res) => {
